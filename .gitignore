@@ -7,3 +7,9 @@ start/*
 core/framework/config/project.txt
 env
 nonce.txt
+
+.terraform/*
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+.terraform.lock.hcl
