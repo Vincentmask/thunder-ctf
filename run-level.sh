@@ -2,6 +2,7 @@
 set -e
 
 LEVEL=$1
+ACTIVE_FILE="config/active_level.txt"
 
 if [ -z "$LEVEL" ]; then
   echo "Usage: ./run-level.sh <level_module_name>"
@@ -9,16 +10,25 @@ if [ -z "$LEVEL" ]; then
   exit 1
 fi
 
+
+
 echo "🚀 Deploying level: $LEVEL"
 terraform apply -target=module.${LEVEL} -auto-approve > /dev/null
+
+# Write active level to config
+echo "$LEVEL" > "$ACTIVE_FILE"
+
+# Run the 
+if [ "$LEVEL" = "a2finance" ]; then
+  sleep 5
+  python3 modules/a2finance/a2finance_provision.py
+fi
 
 echo
 echo "✅ Level deployed!"
 
-echo
-echo "🪣 Bucket Name:"
-terraform output -raw bucket_name 2>/dev/null || terraform output module.${LEVEL}.bucket_name
+
 
 echo
 echo "📜 Level Instructions:"
-terraform output -raw level_instructions 2>/dev/null || terraform output module.${LEVEL}.level_instructions
+terraform output -raw ${LEVEL}_level_instructions
