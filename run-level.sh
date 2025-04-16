@@ -10,25 +10,22 @@ if [ -z "$LEVEL" ]; then
   exit 1
 fi
 
-
-
 echo "🚀 Deploying level: $LEVEL"
 terraform apply -target=module.${LEVEL} -auto-approve > /dev/null
 
 # Write active level to config
 echo "$LEVEL" > "$ACTIVE_FILE"
 
-# Run the 
+# Run the script
 if [ "$LEVEL" = "a2finance" ]; then
-  sleep 5
+  sleep 2
   python3 modules/a2finance/a2finance_provision.py
 fi
 
 echo
 echo "✅ Level deployed!"
 
-
-
 echo
 echo "📜 Level Instructions:"
-terraform output -raw ${LEVEL}_level_instructions
+cat instructions/$LEVEL.txt
+

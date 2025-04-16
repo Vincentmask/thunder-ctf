@@ -50,20 +50,20 @@ resource "google_storage_bucket_object" "secret_txt" {
   content = "The answer to life, the universe, and everything: 42\n"
 }
 
-# ─────────────────────────────────────────────────────────────
-# Output the bucket name so it can be accessed or displayed externally
-# ─────────────────────────────────────────────────────────────
-output "a1_bucket_name" {
-  value = google_storage_bucket.bucket.name
-}
+resource "null_resource" "write_bucket_info" {
+  provisioner "local-exec" {
+    command = <<EOT
+      mkdir -p start
+      mkdir -p instructions
+      echo ${google_storage_bucket.bucket.name} > start/a1_bucket_name.txt
+      echo "The secret for this level can be found in the Google Cloud Storage (GCS) bucket ${google_storage_bucket.bucket.name}" > instructions/a1openbucket.txt
+    EOT
+  }
 
-# ─────────────────────────────────────────────────────────────
-# Output a user instruction string, written with a newline for display formatting
-# ─────────────────────────────────────────────────────────────
-output "level_instructions" {
-  value = "The secret for this level can be found in the Google Cloud Storage (GCS) bucket ${google_storage_bucket.bucket.name}\n"
+  triggers = {
+    bucket = google_storage_bucket.bucket.name
+  }
 }
-
 
 # ─────────────────────────────────────────────────────────────
 # Track the active level deployment by writing to a local file

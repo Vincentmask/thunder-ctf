@@ -12,6 +12,7 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.backends import default_backend
 
 START_DIR = "start"
+INSTRUCTIONS_DIR = "instructions"
 FIRST_NAMES_PATH = "modules/a2finance/first-names.txt"
 LAST_NAMES_PATH = "modules/a2finance/last-names.txt"
 ZONE = "us-central1-a"
@@ -97,14 +98,17 @@ def write_log_entry(target_name):
 
 def write_start_info(target_name):
     os.makedirs(START_DIR, exist_ok=True)
-    with open(os.path.join(START_DIR, "a2finance.txt"), "w") as f:
-        f.write(target_name + "\n")
-    print(f"📄 Wrote target name: {target_name}")
+    os.makedirs(INSTRUCTIONS_DIR, exist_ok=True)
+    instruction = (
+        f"Use the compromised service account credentials stored in start/a2-access.json to find the credit card number of {target_name}, "
+        "which is hidden somewhere in the GCP project."
+    )
+    with open(os.path.join("instructions", "a2finance.txt"), "w") as f:
+        f.write(instruction + "\n")
 
-def get_terraform_output():
-    result = subprocess.run(["terraform", "output", "-json"], capture_output=True, text=True)
-    outputs = json.loads(result.stdout)
-    return outputs["a2_bucket_name"]["value"]
+def get_bucket_from_file():
+    with open("start/a2_bucket_name.txt") as f:
+        return f.read().strip()
 
 def inject_ssh_key(project_id, zone, instance_name, ssh_username, pubkey_path):
     with open(pubkey_path, "r") as f:
@@ -126,7 +130,7 @@ def main():
     os.chmod(priv_path, 0o400)
 
     repo_dir = create_git_repo(priv_path)
-    bucket = get_terraform_output()
+    bucket = get_bucket_from_file()
     upload_to_gcs(bucket, repo_dir)
 
     first_names, last_names = load_names()

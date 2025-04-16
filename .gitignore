@@ -13,3 +13,4 @@ nonce.txt
 *.tfstate.*
 .terraform.lock.hcl
 config/*
+instructions/*
