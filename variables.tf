@@ -14,7 +14,7 @@ variable "project_id" {
 # ─────────────────────────────────────────────────────────────
 variable "region" {
   type        = string
-  default     = "us-central"
+  default     = "us-central1"
   description = "Region for App Engine and other regional resources"
 }
 
@@ -27,5 +27,11 @@ variable "ssh_username" {
   description = "Username for SSH login"
   type        = string
   default     = "clouduser"
+}
+
+variable "level_secret" {
+  type        = string
+  description = "The secret to store in the bucket"
+  default     = "default-a3-secret"
 }
 

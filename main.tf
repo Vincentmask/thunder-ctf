@@ -36,3 +36,13 @@ output "a2finance_level_instructions" {
 output "a2_bucket_name" {
   value = module.a2finance.a2_bucket_name
 }
+
+
+module "a3password" {
+  source     = "./modules/a3password"
+  project_id = var.project_id
+  region     = var.region
+  zone       = var.zone
+
+  level_secret = var.level_secret
+}

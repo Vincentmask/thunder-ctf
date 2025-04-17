@@ -14,3 +14,4 @@ nonce.txt
 .terraform.lock.hcl
 config/*
 instructions/*
+modules/a3password/function.zip
