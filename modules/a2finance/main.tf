@@ -47,7 +47,7 @@ resource "google_compute_instance" "logging_instance" {
     startup-script = file("${path.module}/startup.sh")
   }
 
-  network_interface {
+  network_interface { 
     network       = "default"
     access_config {}
   }

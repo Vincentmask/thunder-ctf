@@ -4,6 +4,7 @@ import random
 import json
 import zipfile
 
+#TODO Write instructions
 # Paths
 base_dir = os.path.dirname(__file__)
 function_dir = os.path.join(base_dir, "function")

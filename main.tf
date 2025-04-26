@@ -46,3 +46,11 @@ module "a3password" {
 
   level_secret = var.level_secret
 }
+
+module "a4error" {
+  source       = "./modules/a4error"
+  project_id   = var.project_id
+  region       = var.region
+  zone         = var.zone
+  level_secret = var.level_secret
+}
