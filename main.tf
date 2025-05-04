@@ -54,3 +54,10 @@ module "a4error" {
   zone         = var.zone
   level_secret = var.level_secret
 }
+
+module "a5power" {
+  source       = "./modules/a5power"
+  project_id   = var.project_id
+  region       = var.region
+  zone         = var.zone
+}

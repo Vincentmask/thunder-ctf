@@ -32,7 +32,8 @@ resource "google_project_service" "core" {
     "appengine.googleapis.com",
     "vision.googleapis.com",
     "sqladmin.googleapis.com",
-    "secretmanager.googleapis.com"
+    "secretmanager.googleapis.com",
+    "run.googleapis.com"
   ])
   service    = each.key
   depends_on = [google_project_service.serviceusage]

@@ -16,3 +16,5 @@ config/*
 instructions/*
 modules/a3password/function.zip
 a4_key*
+secret.txt
+function/
