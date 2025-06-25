@@ -75,6 +75,11 @@ resource "google_service_account" "a4_access" {
   display_name = "Compromised service account"
 }
 
+resource "google_service_account" "function_exec" {
+  account_id   = "a4-func-sa"
+  display_name = "Cloud Function runtime account"
+}
+
 # ──────────────── IAM ────────────────
 resource "google_project_iam_custom_role" "a4_custom_role" {
   role_id     = "a4CustomRole_${random_id.nonce.hex}"
@@ -112,10 +117,10 @@ resource "google_project_iam_custom_role" "a4_can_set_metadata" {
   ]
 }
 
-resource "google_project_iam_member" "bind_a4_set_metadata" {
+resource "google_project_iam_member" "bind_func_set_metadata" {
   project = var.project_id
   role    = google_project_iam_custom_role.a4_can_set_metadata.name
-  member  = "serviceAccount:${google_service_account.a4_access.email}"
+  member  = "serviceAccount:${google_service_account.function_exec.email}"
 }
 
 resource "google_project_iam_member" "a4_sauser_on_vm_sa" {
@@ -135,7 +140,7 @@ resource "google_cloudfunctions_function" "a4_func" {
   source_archive_bucket = google_storage_bucket.function_bucket.name
   source_archive_object = google_storage_bucket_object.function_zip.name
   trigger_http          = true
-  service_account_email = google_service_account.a4_access.email
+  service_account_email = google_service_account.function_exec.email
 }
 
 resource "google_cloudfunctions_function_iam_member" "a4_func_invoker" {
