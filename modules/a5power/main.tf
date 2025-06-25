@@ -29,7 +29,7 @@ resource "google_service_account" "a5_access" {
 
 # ───── Custom Roles ─────
 resource "google_project_iam_custom_role" "func_role" {
-  role_id     = "a5_fcuntion_${random_id.nonce.hex}"
+  role_id     = "a5_function_${random_id.nonce.hex}"
   title       = "Function SA IAM Escalation Role"
   project     = var.project_id
   permissions = [
