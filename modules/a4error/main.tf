@@ -129,6 +129,12 @@ resource "google_project_iam_member" "a4_sauser_on_vm_sa" {
   member  = "serviceAccount:${google_service_account.a4_access.email}"
 }
 
+resource "google_service_account_iam_member" "func_can_act_on_vm_sa" {
+  service_account_id = google_service_account.instance_sa.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${google_service_account.function_exec.email}"
+}
+
 # ──────────────── CLOUD FUNCTION ────────────────
 resource "google_cloudfunctions_function" "a4_func" {
   name        = "a4-func-${random_id.nonce.hex}"
