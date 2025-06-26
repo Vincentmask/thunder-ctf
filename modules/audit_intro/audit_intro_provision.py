@@ -31,7 +31,7 @@ key = iam.projects().serviceAccounts().keys().create(
 ).execute()
 
 key_data = base64.b64decode(key["privateKeyData"]).decode("utf-8")
-key_path = os.path.join(START_DIR, "audit-npc.json")
+key_path = os.path.join(START_DIR, "intro-leaked.json")
 with open(key_path, "w") as f:
     f.write(key_data)
 
