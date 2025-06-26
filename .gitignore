@@ -23,4 +23,4 @@ generated/*
 
 modules/audit_intro/generated/*
 config
-terraform.tfvars
+

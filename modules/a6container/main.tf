@@ -22,6 +22,11 @@ resource "google_service_account" "a6_access" {
   display_name = "Compromised Developer SA"
 }
 
+resource "google_service_account" "a6_vm_sa" {
+  account_id   = "a6-container-vm-sa"
+  display_name = "VM SA for a6 container"
+}
+
 # ───── IAM Bindings ─────
 resource "google_project_iam_custom_role" "a6_custom_role" {
   role_id     = "a6CustomRole_${random_id.nonce.hex}"
@@ -32,10 +37,8 @@ resource "google_project_iam_custom_role" "a6_custom_role" {
     "compute.instances.list",
     "compute.instances.setMetadata",
     "compute.zones.list",
-    "storage.objects.get",
-    "storage.objects.list",
-    "storage.buckets.get",
-    "storage.buckets.list"
+    "storage.buckets.list",
+    "storage.objects.list"
   ]
 }
 
@@ -49,6 +52,12 @@ resource "google_project_iam_member" "a6_logging_viewer" {
   project = var.project_id
   role    = "roles/logging.viewer"
   member  = "serviceAccount:${google_service_account.a6_access.email}"
+}
+
+resource "google_project_iam_member" "vm_can_read_bucket" {
+  project = var.project_id
+  role    = "roles/storage.objectViewer"
+  member  = "serviceAccount:${google_service_account.a6_vm_sa.email}"
 }
 
 # ───── Container Declaration ─────
@@ -95,7 +104,7 @@ resource "google_compute_instance" "container_vm" {
   tags = ["http-server"]
 
   service_account {
-    email  = google_service_account.a6_access.email
+    email  = google_service_account.a6_vm_sa.email
     scopes = ["cloud-platform"]
   }
 }

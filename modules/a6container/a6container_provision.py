@@ -39,12 +39,10 @@ def write_start_file(message: str, key_data: str):
     # Write instructions to instructions/a6container.txt
     with open(os.path.join(instructions_dir, "a6container.txt"), "w") as f:
         f.write(message + "\n")
-    os.chmod(os.path.join(instructions_dir, "a6container.txt"), 0o400)
 
     # Write service account key to start/a6-access.json
     with open(os.path.join(start_dir, KEY_FILENAME), "w") as f:
         f.write(base64.b64decode(key_data).decode("utf-8"))
-    os.chmod(os.path.join(start_dir, KEY_FILENAME), 0o400)
 
 def main():
     with open(bucket_file) as f:
